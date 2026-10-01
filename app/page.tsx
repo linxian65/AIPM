@@ -1,10 +1,18 @@
-export default function HomePage() {
+import { Suspense } from "react";
+import { Hero } from "@/components/landing/Hero";
+import { PresetGrid } from "@/components/landing/PresetGrid";
+import { PresetGridSkeleton } from "@/components/landing/PresetGridSkeleton";
+
+export default function Home() {
   return (
-    <main className="container flex min-h-screen flex-col items-center justify-center gap-4 py-16">
-      <h1 className="text-4xl font-bold">AI PM 评估副驾驶</h1>
-      <p className="text-muted-foreground">
-        从模糊需求到可评审方案，强制暴露风险。
-      </p>
+    <main>
+      <Hero />
+      <section className="container py-16">
+        <h2 className="mb-6 text-2xl font-semibold">预置案例</h2>
+        <Suspense fallback={<PresetGridSkeleton />}>
+          <PresetGrid />
+        </Suspense>
+      </section>
     </main>
   );
 }
