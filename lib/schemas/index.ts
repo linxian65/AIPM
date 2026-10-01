@@ -31,3 +31,4 @@ export * from "./feature";
 export * from "./solution";
 export * from "./eval";
 export * from "./redteam";
+export * from "./project";
