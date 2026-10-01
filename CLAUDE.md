@@ -1,0 +1,13 @@
+# 项目约定
+- 语言：UI 中文，代码英文
+- 包管理：pnpm
+- 组件：shadcn/ui 优先，不重复造轮子
+- 状态：Server Components 优先，必要时用 client
+- API：Next.js Route Handlers
+- 数据库：Supabase + Prisma
+- AI：Anthropic SDK，模型 claude-sonnet，温度 0.3
+- 所有 AI 输出用 Zod 校验，schema 放 /lib/schemas
+- Prompt 放 /lib/prompts，每个 prompt 单独文件
+- 不要硬编码 API Key，用 .env.local
+- 每个功能完成后跑 lint + build
+- 提交信息：feat/fix/chore/docs
