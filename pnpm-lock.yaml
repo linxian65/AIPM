@@ -29,6 +29,9 @@ importers:
       tailwind-merge:
         specifier: ^2.5.4
         version: 2.6.1
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
     devDependencies:
       '@prisma/client':
         specifier: 6.19.3
@@ -1987,6 +1990,9 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
 snapshots:
 
@@ -4178,3 +4184,5 @@ snapshots:
     optional: true
 
   yocto-queue@0.1.0: {}
+
+  zod@3.25.76: {}
