@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Stage {
+  clarify
+  feature
+  solution
+  eval
+  redteam
+}
+
+model Project {
+  id           String        @id @default(cuid())
+  title        String
+  brief        String
+  currentStage Stage         @default(clarify)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  outputs      StageOutput[]
+
+  @@index([updatedAt])
+}
+
+model StageOutput {
+  id        String   @id @default(cuid())
+  projectId String
+  stage     Stage
+  content   Json
+  version   Int      @default(1)
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, stage, version])
+  @@index([projectId, stage])
+}
+
+model PresetCase {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  brief     String
+  domain    String
+  createdAt DateTime @default(now())
+}
