@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import type { StageName } from "@/lib/schemas";
+import { GenerateButton } from "./GenerateButton";
 
 const STAGE_TITLE: Record<StageName, string> = {
   clarify: "引导追问",
@@ -9,9 +9,9 @@ const STAGE_TITLE: Record<StageName, string> = {
   redteam: "红队评审",
 };
 
-type Props = { brief: string; currentStage: StageName };
+type Props = { projectId: string; brief: string; currentStage: StageName };
 
-export function ChatPane({ brief, currentStage }: Props) {
+export function ChatPane({ projectId, brief, currentStage }: Props) {
   return (
     <div className="space-y-6">
       <div>
@@ -26,11 +26,7 @@ export function ChatPane({ brief, currentStage }: Props) {
         <p className="mt-2 text-sm">{brief}</p>
       </div>
 
-      <div className="rounded-md border border-dashed p-6 text-center text-sm text-muted-foreground">
-        C 阶段接入：点击下方按钮调用 runStage
-      </div>
-
-      <Button disabled>生成（C 阶段启用）</Button>
+      <GenerateButton projectId={projectId} stage={currentStage} />
     </div>
   );
 }
