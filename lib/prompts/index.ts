@@ -10,21 +10,20 @@ export function getPromptForStage(
   brief: string,
   previousOutputs?: Record<string, unknown>
 ): string {
-  const base = `用户需求：${brief}\n\n`;
   const context = previousOutputs
     ? `已有产物：\n${JSON.stringify(previousOutputs, null, 2)}\n\n`
     : "";
 
   switch (stage) {
     case "clarify":
-      return clarifyPrompt(base);
+      return clarifyPrompt(brief);
     case "feature":
-      return featurePrompt(base, context);
+      return featurePrompt(brief, context);
     case "solution":
-      return solutionPrompt(base, context);
+      return solutionPrompt(brief, context);
     case "eval":
-      return evalPrompt(base, context);
+      return evalPrompt(brief, context);
     case "redteam":
-      return redteamPrompt(base, context);
+      return redteamPrompt(brief, context);
   }
 }

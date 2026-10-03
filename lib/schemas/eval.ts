@@ -9,7 +9,6 @@ export const EvalSchema = z.object({
         category: EvalCaseCategory,
         input: z.string().min(1),
         expected: z.string().min(1),
-        notes: z.string().optional(),
       })
     )
     .min(4),
