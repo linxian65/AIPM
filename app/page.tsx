@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Suspense } from "react";
 import { Hero } from "@/components/landing/Hero";
 import { PresetGrid } from "@/components/landing/PresetGrid";

@@ -8,6 +8,7 @@ export const anthropic =
   globalForAnthropic.anthropic ??
   new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
+    baseURL: process.env.ANTHROPIC_BASE_URL,
     maxRetries: 3,
     timeout: 300_000, // 5 分钟
   });
