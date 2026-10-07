@@ -9,6 +9,7 @@ type Props = {
   currentStage: StageName;
   completedStages: Set<StageName>;
   currentOutput: unknown | null;
+  currentFeedback: unknown | null;
 };
 
 export function WorkbenchShell({
@@ -16,6 +17,7 @@ export function WorkbenchShell({
   currentStage,
   completedStages,
   currentOutput,
+  currentFeedback,
 }: Props) {
   return (
     <div className="flex h-screen flex-col">
@@ -42,6 +44,7 @@ export function WorkbenchShell({
             brief={project.brief}
             currentStage={currentStage}
             currentOutput={currentOutput}
+            currentFeedback={currentFeedback}
           />
         </section>
         <section className="w-[480px] overflow-y-auto p-6">

@@ -24,7 +24,7 @@ export function getPromptForStage(
     case "feature":
       return featurePrompt(brief, context);
     case "solution":
-      return solutionPrompt(brief, context);
+      return solutionPrompt(brief, context, feedback);
     case "eval":
       return evalPrompt(brief, context);
     case "redteam":

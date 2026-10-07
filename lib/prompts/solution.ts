@@ -1,10 +1,20 @@
-export function solutionPrompt(brief: string, context: string): string {
-  return `你是 AI 产品经理的评估副驾驶。基于用户需求、引导追问和功能定义卡，生成至少 2 个技术方案对比，并给出推荐。
-
+export function solutionPrompt(
+  brief: string,
+  context: string,
+  feedback: string
+): string {
+  const isRevision = feedback.trim().length > 0;
+  return `你是 AI 产品经理的评估副驾驶。基于用户需求、前序产物${isRevision ? "，以及用户对上一版方案的选择" : ""}，生成方案对比。
 用户需求：${brief}
-
 ${context}
-
+${isRevision ? feedback : ""}
+${isRevision ? `
+这是修订轮次。用户已经从上一版方案中做出了选择。请：
+- 保留用户选择的方向作为推荐方案
+- 围绕用户的选择理由/附加约束，重写方案的 pros/cons/fit
+- 保留至少 2 个 options（把用户选择的标为推荐，另外 1 个作为对照）
+- recommendation 必须回应用户的理由/约束
+` : `生成至少 2 个技术方案对比，并给出推荐。`}
 要求：
 - options 至少 2 个，每个包含：
   - name：方案名称，突出技术路线差异（如"单模型直出"、"RAG + 微调"、"规则引擎 + LLM 兜底"、"多 Agent 协作"）
