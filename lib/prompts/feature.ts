@@ -13,8 +13,16 @@ ${context}
 - 成功标准（successCriteria）：可度量，避免"用户体验好"这类空话
 - 非目标（nonGoals）：明确排除的功能，防止范围蔓延
 
+约束读取规则（核心，一环扣一环的关键）：
+- 上游产物里的 \`clarify.clarifiedConstraints\` 是用户在引导追问环节已确认的约束（用户回答被提炼后的结构化陈述）
+- 如果 \`clarifiedConstraints\` 非空（数组里有内容），其中的每一条都必须直接体现在：
+  - inputs / outputs：具体到约束中的场景，不要泛指
+  - successCriteria：数字化的目标，例如"转人工率 ≤ 25%"、"误判率 ≤ 5%"
+  - nonGoals：明确排除项
+- 优先级高于你从 questions 推断出的内容
+- 如果 \`clarifiedConstraints\` 是空数组（首轮 / 用户没回答），按正常流程从 questions 推断即可，不要硬编约束
+
 原则：
-- 如果前序追问里已经澄清了用户、错误代价、转人工场景，必须体现在定义里
 - successCriteria 要具体到指标，比如"转人工率 ≤ 25%"，不要"降低人工负担"
 - nonGoals 至少 2 条，宁可少做也要边界清楚`;
 }

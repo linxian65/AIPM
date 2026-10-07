@@ -5,6 +5,16 @@ export function redteamPrompt(brief: string, context: string): string {
 
 ${context}
 
+约束读取规则（一环扣一环的关键）：
+- 上游产物里的 \`clarify.clarifiedConstraints\` 是用户已确认的约束
+- 如果非空，其中提到的每一类约束必须被对应角色的 concern 回应：
+  - 延迟/成本/并发约束 → eng 角色必须至少 1 条 concern
+  - 合规/隐私/数据来源约束 → legal 角色必须至少 1 条 concern
+  - 错误代价/可容忍错误率/置信度约束 → algo 角色必须至少 1 条 concern
+  - 用户体验/退出成本/信任建立约束 → design + user 角色必须至少各 1 条 concern
+- fix 必须能直接缓解用户表达过的担忧，不要写"加强测试"这种空话
+- 如果是空数组（首轮 / 用户没回答），按功能定义卡和方案对比里的隐含约束分配即可
+
 五个角色（parties）必须全部覆盖，每个角色至少 1 条 concern：
 - algo（算法）：评估集覆盖度、指标可测性、模型失效模式、数据分布漂移
 - eng（工程）：延迟、成本、依赖、并发、可观测性、回滚能力

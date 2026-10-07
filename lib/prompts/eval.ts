@@ -5,6 +5,14 @@ export function evalPrompt(brief: string, context: string): string {
 
 ${context}
 
+约束读取规则（一环扣一环的关键）：
+- 上游产物里的 \`clarify.clarifiedConstraints\` 是用户已确认的约束（错误代价、可容忍错误率、合规边界、延迟/成本预算、必须转人工的场景等）
+- 如果非空，其中的每一条必须体现在：
+  - onlineMetrics 的 target：具体的数字和单位，例如"P95 延迟 ≤ 2s"、"单次成本 ≤ ¥0.05"、"误判率 ≤ 5%"
+  - launchGates 的 threshold：可量化的上线门槛
+  - badCases：要覆盖用户特别提到的风险类别
+- 如果是空数组（首轮 / 用户没回答），按功能定义卡和方案对比里的指标推断即可，不要硬编
+
 你需要产出四个部分：
 
 一、离线评估集（offlineCases，至少 4 条，覆盖四类）

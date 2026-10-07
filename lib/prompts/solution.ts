@@ -24,6 +24,12 @@ ${isRevision ? `
   - complexity：low / medium / high，评估实现复杂度
 - recommendation：明确推荐哪个方案，并说明为什么在当前约束下最优
 
+约束读取规则（一环扣一环的关键）：
+- 上游产物里的 \`clarify.clarifiedConstraints\` 是用户已确认的约束（成本上限、延迟要求、合规边界、技术栈偏好、错误代价等）
+- 如果非空，每个 option 的 fit / pros / cons 是否体现这些约束，并影响 recommendation 的选择
+- 如果是空数组（首轮 / 用户没回答），按功能定义卡里隐含的约束推断，不要硬编
+${isRevision ? "- 同时本轮的用户反馈（choice + reason）是直接决策输入：选择的方向必须作为推荐，选择理由必须体现在推荐方案的 pros/cons/fit" : ""}
+
 原则：
 - 方案差异要在技术路线层面，不要"方案 A vs 方案 A 的优化版"
 - pros/cons 要落到 AI PM 关心的维度：成本、延迟、错误率、数据依赖、可解释性、合规
