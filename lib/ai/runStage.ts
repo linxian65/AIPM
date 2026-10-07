@@ -13,6 +13,7 @@ type RunStageInput = {
   stage: StageSchemaKey;
   brief: string;
   previousOutputs?: Record<string, unknown>;
+  userFeedback?: unknown;
 };
 
 const MAX_BIZ_RETRIES = 1;
@@ -20,10 +21,10 @@ const MAX_BIZ_RETRIES = 1;
 export async function runStage<T = unknown>(
   input: RunStageInput
 ): Promise<RunStageResult<T>> {
-  const { stage, brief, previousOutputs } = input;
+  const { stage, brief, previousOutputs, userFeedback } = input;
   const schema = StageSchemaMap[stage];
   const tool = getToolForStage(stage);
-  const systemPrompt = getPromptForStage(stage, brief, previousOutputs);
+  const systemPrompt = getPromptForStage(stage, brief, previousOutputs, userFeedback);
 
   let lastError: { error: string; raw?: unknown } | null = null;
 

@@ -12,7 +12,11 @@ const PREVIOUS_STAGES: Record<StageName, StageName[]> = {
   redteam: ["clarify", "feature", "solution", "eval"],
 };
 
-export async function runStageForProject(projectId: string, stage: StageName) {
+export async function runStageForProject(
+  projectId: string,
+  stage: StageName,
+  userFeedback?: unknown
+) {
   const project = await prisma.project.findUnique({ where: { id: projectId } });
   if (!project) return { ok: false as const, error: "PROJECT_NOT_FOUND" };
 
@@ -24,7 +28,12 @@ export async function runStageForProject(projectId: string, stage: StageName) {
       orderBy: { version: "desc" },
     });
     for (const o of outputs) {
-      if (!(o.stage in previousOutputs)) previousOutputs[o.stage] = o.content;
+      if (!(o.stage in previousOutputs)) {
+        previousOutputs[o.stage] = o.content;
+        if (o.feedback) {
+          previousOutputs[`${o.stage}_feedback`] = o.feedback;
+        }
+      }
     }
   }
 
@@ -32,27 +41,34 @@ export async function runStageForProject(projectId: string, stage: StageName) {
     stage: stage as StageSchemaKey,
     brief: project.brief,
     previousOutputs,
+    userFeedback,
   });
 
   const content = result.ok ? result.data : result.fallback;
-  const nextVersion = await prisma.$transaction(async (tx) => {
-    const max = await tx.stageOutput.aggregate({
-      where: { projectId, stage },
-      _max: { version: true },
-    });
-    const version = (max._max.version ?? 0) + 1;
-    await tx.stageOutput.create({
-      data: { projectId, stage, content: content as object, version },
-    });
-    // 成功后推进 currentStage
-    if (result.ok) {
-      await tx.project.update({
-        where: { id: projectId },
-        data: { currentStage: stage },
-      });
-    }
-    return version;
+  // Neon pooler 不支持跨语句的交互式事务（prisma.$transaction），
+  // 拆成三个独立调用：aggregate 取最大 version → create 写入 → update 推进 currentStage。
+  // 代价：create 成功但 update 失败时 currentStage 落后一拍，下一轮会自然修正。
+  const max = await prisma.stageOutput.aggregate({
+    where: { projectId, stage },
+    _max: { version: true },
   });
+  const nextVersion = (max._max.version ?? 0) + 1;
+  await prisma.stageOutput.create({
+    data: {
+      projectId,
+      stage,
+      content: content as object,
+      feedback: (userFeedback as object) ?? undefined,
+      version: nextVersion,
+    },
+  });
+  // 成功后推进 currentStage
+  if (result.ok) {
+    await prisma.project.update({
+      where: { id: projectId },
+      data: { currentStage: stage },
+    });
+  }
 
   return {
     ok: result.ok,

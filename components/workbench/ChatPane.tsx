@@ -1,5 +1,7 @@
 import type { StageName } from "@/lib/schemas";
+import { ClarifySchema } from "@/lib/schemas";
 import { GenerateButton } from "./GenerateButton";
+import { ClarifyFeedbackForm } from "./ClarifyFeedbackForm";
 
 const STAGE_TITLE: Record<StageName, string> = {
   clarify: "引导追问",
@@ -9,9 +11,25 @@ const STAGE_TITLE: Record<StageName, string> = {
   redteam: "红队评审",
 };
 
-type Props = { projectId: string; brief: string; currentStage: StageName };
+type Props = {
+  projectId: string;
+  brief: string;
+  currentStage: StageName;
+  currentOutput: unknown | null;
+};
 
-export function ChatPane({ projectId, brief, currentStage }: Props) {
+export function ChatPane({
+  projectId,
+  brief,
+  currentStage,
+  currentOutput,
+}: Props) {
+  const clarifyParsed =
+    currentStage === "clarify" && currentOutput
+      ? ClarifySchema.safeParse(currentOutput)
+      : null;
+  const showClarifyForm = clarifyParsed?.success === true;
+
   return (
     <div className="space-y-6">
       <div>
@@ -26,7 +44,14 @@ export function ChatPane({ projectId, brief, currentStage }: Props) {
         <p className="mt-2 text-sm">{brief}</p>
       </div>
 
-      <GenerateButton projectId={projectId} stage={currentStage} />
+      {showClarifyForm ? (
+        <ClarifyFeedbackForm
+          projectId={projectId}
+          questions={clarifyParsed.data.questions}
+        />
+      ) : (
+        <GenerateButton projectId={projectId} stage={currentStage} />
+      )}
     </div>
   );
 }

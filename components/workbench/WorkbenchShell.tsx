@@ -41,6 +41,7 @@ export function WorkbenchShell({
             projectId={project.id}
             brief={project.brief}
             currentStage={currentStage}
+            currentOutput={currentOutput}
           />
         </section>
         <section className="w-[480px] overflow-y-auto p-6">

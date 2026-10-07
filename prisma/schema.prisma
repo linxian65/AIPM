@@ -33,6 +33,7 @@ model StageOutput {
   projectId String
   stage     Stage
   content   Json
+  feedback  Json?
   version   Int      @default(1)
   createdAt DateTime @default(now())
 

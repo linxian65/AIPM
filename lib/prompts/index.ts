@@ -8,15 +8,19 @@ import { redteamPrompt } from "./redteam";
 export function getPromptForStage(
   stage: StageSchemaKey,
   brief: string,
-  previousOutputs?: Record<string, unknown>
+  previousOutputs?: Record<string, unknown>,
+  userFeedback?: unknown
 ): string {
   const context = previousOutputs
     ? `已有产物：\n${JSON.stringify(previousOutputs, null, 2)}\n\n`
     : "";
+  const feedback = userFeedback
+    ? `用户反馈：\n${JSON.stringify(userFeedback, null, 2)}\n\n`
+    : "";
 
   switch (stage) {
     case "clarify":
-      return clarifyPrompt(brief);
+      return clarifyPrompt(brief, feedback);
     case "feature":
       return featurePrompt(brief, context);
     case "solution":
