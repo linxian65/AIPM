@@ -8,6 +8,7 @@ cd AIPM
 pnpm install
 cp .env.example .env.local   # 编辑后填 5 个变量，见下文
 pnpm prisma db push
+pnpm db:seed                 # 种 3 个预置案例，否则 / 会显示"暂无预置案例"
 pnpm dev
 # → http://localhost:3000
 ```
@@ -49,6 +50,7 @@ ANTHROPIC_MODEL=claude-sonnet-5
 ```bash
 pnpm install                # 自动跑 prisma generate（postinstall）
 pnpm prisma db push         # 把 schema 推到 Neon，建表
+pnpm db:seed                # 种 3 个预置案例，否则首页是空的
 pnpm dev                    # http://localhost:3000
 ```
 
